@@ -6,3 +6,4 @@ Template repo for python projects
 - Install poetry 
 - Run `poetry install`
 - Open virtual env by `poetry shell`
+- Add dependencies  by `poetry add package_name`
