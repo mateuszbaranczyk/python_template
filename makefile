@@ -1,30 +1,20 @@
-.PHONY: format lint check_git push tag update_v deploy
+.PHONY: setup
+setup:
+	@command -v uv >/dev/null 2>&1 || { \
+		echo "Installing uv..."; \
+		curl -LsSf https://astral.sh/uv/install.sh | sh; \
+	}
+	@echo "Setting up Python environment..."
+	uv sync
 
-format:
-	black .
-	isort .
+.PHONY: install
+install:
+	@echo "Creating fresh environment and installing dependencies..."
+	rm -rf .venv
+	uv sync
 
-lint:
-	flake8
-
-check_git:
-	@if [ -n "$$(git status --porcelain)" ]; then \
-		echo "There are uncommitted changes. Please commit them first."; \
-		exit 1; \
-	fi
-
-push:
-	git push
-
-tag:
-	@git tag -a v$(v) -m "v $(v)"
-	@git push origin v$(v)
-
-update_version:
-	@echo "Updating version to $(v)"
-	@sed 's/^version = ".*"/version = "$(v)"/' pyproject.toml > pyproject.toml.tmp
-	@mv pyproject.toml.tmp pyproject.toml
-	@git add pyproject.toml
-	@git commit -m "Bump version to $(v)"
-
-deploy: format lint check_git tag update_version push
+.PHONY: fix
+fix:
+	@echo "Running ruff check and format..."
+	uv run ruff check --fix .
+	uv run ruff format .

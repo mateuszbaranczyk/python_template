@@ -1,18 +1,30 @@
-[tool.poetry]
-name = "template"
+[project]
+name = "python_template"
 version = "0.1.0"
 description = ""
-authors = ["kundziorro <mateusz.baranczyk@gmail.com>"]
+requires-python = ">=3.14"
+dependencies = []
 
-[tool.poetry.dependencies]
-python = "^3.12"
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.8.0",
+]
 
-[tool.poetry.dev-dependencies]
-black = "^24.4.2"
-flake8 = "^7.1.0"
-isort = "^5.13.2"
-pytest = "^7.2.0"
+[tool.ruff]
+line-length = 79
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["python_template"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/python_template"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
